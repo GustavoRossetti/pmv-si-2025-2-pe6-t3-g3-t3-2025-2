@@ -218,6 +218,152 @@ Manter os serviços desacoplados, permitindo que cada módulo evolua de forma in
     }
 	```
 
+### Endpoint Avaliações
+
+- **Método:** `GET`
+- **URL:** `/hotels/{hotel_id}/reviews`
+- Parâmetros: hotel_id: O ID do hotel que você deseja consultar. 
+#### Respostas:
+> **Sucesso (`200 OK`)**
+>
+> ```json
+> {
+>   "message": "Success",
+>   "data": [
+>     {
+>       "rating": 5,
+>       "comment": "Excelente estadia!",
+>       "id": 1,
+>       "hotel_id": 1,
+>       "user": {
+>         "user_name": "john_doe"
+>       }
+>     }
+>   ]
+> }
+> ```
+> **Erro (`404 Not Found`)**
+>
+> ```json
+> {
+>   "message": "Error",
+>   "data": {
+>     "detail": "Hotel not found"
+>   }
+> }
+> ```
+---
+- **Método:** `POST`
+- **URL:** `/hotels/{hotel_id}/reviews`
+- Parâmetros: hotel_id: O ID do hotel a ser avaliado. Request Body (JSON): Um objeto contendo a nota e o comentário.
+  ```json
+  {
+      "rating": 5,
+      "comment": "Adorei a experiência!"
+  }
+> **Sucesso (`201 Created`)**
+>
+> ```json
+> {
+>   "message": "Success",
+>   "data": {
+>     "rating": 5,
+>     "comment": "Adorei a experiência!",
+>     "id": 2,
+>     "hotel_id": 1,
+>     "user": {
+>       "user_name": "john_doe"
+>     }
+>   }
+> }
+> ```
+> **Erro (`401 Unauthorized`)**
+>
+> ```json
+> {
+>   "message": "Error",
+>   "data": {
+>     "detail": "Não há um usuário 'logado'. Por favor, faça o login."
+>   }
+> }
+> ```
+- **Método:** `PUT`
+- **URL:** `/reviews/{review_id}`
+- Parâmetros: review_id : O ID da avaliação que você deseja modificar. Request Body (JSON): Um objeto com os campos a serem atualizados
+  ```json
+  {
+      "rating": 3,
+      "comment": "Atualizando meu comentário."
+  }
+> **Sucesso (`200 OK`)**
+>
+> ```json
+> {
+>   "message": "Success",
+>   "data": {
+>     "rating": 3,
+>     "comment": "Atualizando meu comentário.",
+>     "id": 2,
+>     "hotel_id": 1,
+>     "user": {
+>       "user_name": "john_doe"
+>     }
+>   }
+> }
+> ```
+> **Erro (`403 Forbidden`)**
+>
+> *Retornado quando um usuário tenta alterar a avaliação de outra pessoa.*
+> ```json
+> {
+>   "message": "Error",
+>   "data": {
+>     "detail": "Not authorized"
+>   }
+> }
+> ```
+> **Erro (`404 Not Found`)**
+>
+> ```json
+> {
+>   "message": "Error",
+>   "data": {
+>     "detail": "Review not found"
+>   }
+> }
+> ```
+- **Método:** `DELETE`
+- **URL:** `/reviews/{review_id}`
+Parâmetros: review_id: O ID da avaliação a ser deletada.
+#### Respostas:
+> **Sucesso (`204 No Content`)**
+>
+> *Retornado quando a avaliação é deletada com sucesso. Esta resposta não possui corpo (body).*
+> **Erro (`403 Forbidden`)**
+>
+> *Retornado quando um usuário tenta deletar a avaliação de outra pessoa.*
+> ```json
+> {
+>   "message": "Error",
+>   "data": {
+>     "detail": "Not authorized"
+>   }
+> }
+> ```
+> **Erro (`404 Not Found`)**
+>
+> ```json
+> {
+>   "message": "Error",
+>   "data": {
+>     "detail": "Review not found"
+>   }
+> }
+> ```
+
+
+
+
 ## Considerações de Segurança
 
 [Discuta as considerações de segurança relevantes para a aplicação distribuída, como autenticação, autorização, proteção contra ataques, etc.]
